@@ -40,6 +40,13 @@ dt1=dt[order(dt[,2]),]
 View(dt1)
 
 ## Variable Clustering
-
-
+first_3_PCs=eig_vec[,1:3]
+first_3_lambda=eig_val[1:3]
+sqrt_first_3_lambda=sqrt(first_3_lambda)
+mat=matrix(rep(sqrt_first_3_lambda,nrow(first_3_PCs)),nrow = nrow(first_3_PCs),byrow = F)
+final_mat=first_3_PCs*mat
+View(final_mat)
+cl=kmeans(final_mat,3, iter.max = 100,nstart = 3)
+cl_nms=cl$cluster
+plot3d(final_mat,type = 's',col=cl_nms,xlab = "PCA1",ylab = "PCA2",zlab =  "PCA3",radius = 0.15)
 
