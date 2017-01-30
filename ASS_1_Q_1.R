@@ -39,5 +39,7 @@ dt=data.frame(country_wo_outlr,PCA1)
 dt1=dt[order(dt[,2]),]
 View(dt1)
 
+## Variable Clustering
+
 
 
