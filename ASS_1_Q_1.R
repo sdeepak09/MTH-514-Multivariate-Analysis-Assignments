@@ -48,5 +48,6 @@ final_mat=first_3_PCs*mat
 View(final_mat)
 cl=kmeans(final_mat,3, iter.max = 100,nstart = 3)
 cl_nms=cl$cluster
-plot3d(final_mat,type = 's',col=cl_nms,xlab = "PCA1",ylab = "PCA2",zlab =  "PCA3",radius = 0.15)
+plot3d(final_mat,type = 's',col=cl_nms,xlab = "PCA1",ylab = "PCA2",zlab =  "PCA3",radius = 0.1)
+
 
