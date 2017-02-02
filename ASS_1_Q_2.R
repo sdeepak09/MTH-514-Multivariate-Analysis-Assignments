@@ -1,6 +1,6 @@
 ## Assignment 2 Answer of question 2
 dt=read.csv("q2_data.csv")
-View(dt)
+#View(dt)
 dt=dt[,-21]
 bank_vec=dt[,1]
 dt_new=dt[,-1]
@@ -20,14 +20,68 @@ yy=matrix(rep(xx,4),byrow = T, nrow = 4)
 zz=as.vector(yy)
 zz
 library(rgl)
-plot3d(proj_dt,col=as.factor(zz),type = 's',xlab = "PC1",ylab = "PC2",zlab =  "PC3",radius = 0.3)
-plot3d(proj_dt[which(zz==1),],type = 'l',xlab = "PC1",ylab = "PC2",zlab =  "PC3",radius = 0.1)
-text3d(proj_dt[which(zz==1),],texts = bank_vec[1:4])
+plot3d(proj_dt,col=as.factor(zz),type = 's',xlab = "PC1",ylab = "PC2",zlab =  "PC3",radius = 0.1)
+text3d(proj_dt,texts = as.factor(c(1:108)))
+## After ploting the curve many time I have realised that we have to remove some banks to do aur analysis
+## 37:40,93:100
+proj_dt_rvisd=proj_dt[-c(37:40,93:100),]
+bank_vec_rvisd=bank_vec[-c(37:40,93:100)]
+xx=c(1:24)
+yy=matrix(rep(xx,4),byrow = T, nrow = 4)
+zz=as.vector(yy)
+plot3d(proj_dt_rvisd,col=as.factor(zz),type = 's',xlab = "PC1",ylab = "PC2",zlab =  "PC3",radius = 0.1)
+text3d(proj_dt_rvisd,texts = as.factor(c(1:96)))
+## 41:44,29:32,65:68,77:80
+proj_dt_rvisd=proj_dt_rvisd[-c( 41:44,29:32,65:68,77:80),]
+bank_vec_rvisd=bank_vec_rvisd[-c( 41:44,29:32,65:68,77:80)]
+xx=c(1:20)
+yy=matrix(rep(xx,4),byrow = T, nrow = 4)
+zz=as.vector(yy)
+plot3d(proj_dt_rvisd,col=as.factor(zz),type = 's',xlab = "PC1",ylab = "PC2",zlab =  "PC3",radius = 0.1)
+text3d(proj_dt_rvisd,texts = as.factor(c(1:80)))
+
+for(i in 1:20){
+  open3d()
+tag_2=4*i
+tag_1=tag_2-3
+plot3d(proj_dt_rvisd[which(zz==i),],type = 'l',xlab = "PC1",ylab = "PC2",zlab =  "PC3", aspect = F,xlim = c(min(proj_dt_rvisd[,1]),max(proj_dt_rvisd[,1])),ylim = c(min(proj_dt_rvisd[,2]),max(proj_dt_rvisd[,2])), zlim =c(min(proj_dt_rvisd[,3]),max(proj_dt_rvisd[,3])))
+text3d(proj_dt_rvisd[which(zz==i),],texts = bank_vec_rvisd[tag_1:tag_2])
+}
 #red=96-97  blue=97-98  green=98-99  pink=1999-2000
 xxx=c(1:4)
 yyy=matrix(rep(xxx,27),byrow = T, nrow = 27)
 zzz=as.vector(t(yyy))
 plot3d(proj_dt,col=as.factor(zzz),type = 's',xlab = "PC1",ylab = "PC2",zlab =  "PC3",radius = 0.3)
+
+
+
+
+
+
+##### Variable Clustering
+
+dt_new_x=dt_new[-c(37:40,93:100),]
+dt_new_x=dt_new_x[-c(41:44,29:32,65:68,77:80),]
+scaled_dt_x=scale(dt_new_x)
+cov_mt_x=t(scaled_dt_x)%*%(scaled_dt_x)
+cor_mt_x=cov_mt_x/cov_mt_x[1,1]
+eig_vl_vc_x=eigen(cor_mt_x)
+eig_vl_x=eig_vl_vc_x$values
+eig_vc_x=eig_vl_vc_x$vectors
+
+first_3_PCs=eig_vc_x[,1:3]
+first_3_lambda=eig_vl_x[1:3]
+sqrt_first_3_lambda=sqrt(first_3_lambda)
+mat=matrix(rep(sqrt_first_3_lambda,nrow(first_3_PCs)),nrow = nrow(first_3_PCs),byrow = F)
+final_mat=first_3_PCs*mat
+#View(final_mat)
+cl=kmeans(final_mat,6, iter.max = 100,nstart = 3)
+cl_nms=cl$cluster
+plot3d(final_mat,type = 's',col=cl_nms,xlab = "PCA1",ylab = "PCA2",zlab =  "PCA3",radius = 0.1)
+Vars=colnames(dt_new_x)
+
+Vars[which(cl_nms==1)]
+
 
 
 

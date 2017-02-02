@@ -11,7 +11,7 @@ eig_vec=eig_val_vec$vectors
 data_new=as.matrix(data_cen_mat)%*%eig_vec[,1:3]
 library(rgl)
 plot3d(data_new,type = 's',xlab = "PC1",ylab = "PC2",zlab =  "PC3",radius = 0.01)
-text3d(data_new,texts=rownames(data),col="red")
+text3d(data_new,texts=rownames(data),col="black")
 
 
 data_1=data[-c(3,5,8,10,14,15,25,42,57,60,63,64,72,93,98,106,113),]
@@ -30,7 +30,7 @@ text3d(data_new_1,texts=as.factor(c(1:103)),col="red")
 
 
 ## Clustering of the countries
-clust=kmeans(data_new_1,5, iter.max = 100,nstart = 3)
+clust=kmeans(data_new_1,6, iter.max = 100,nstart = 3)
 cl=clust$cluster
 plot3d(data_new_1,type = 's',col=cl,xlab = "PCA1",ylab = "PCA2",zlab =  "PCA3",radius = 0.3)
 
@@ -41,6 +41,9 @@ country_wo_outlr=country[-c(3,5,8,10,14,15,25,42,57,60,63,64,72,93,98,106,113)]
 PCA1=data_new_1[,1]
 dt=data.frame(country_wo_outlr,PCA1)
 dt1=dt[order(-dt[,2]),]
+rank=c(1:nrow(dt1))
+dt1=data.frame(dt1,rank)
+dt1
 View(dt1)   ## Good 
 
 ## Variable Clustering
@@ -49,13 +52,13 @@ first_3_lambda=eig_val_1[1:3]
 sqrt_first_3_lambda=sqrt(first_3_lambda)
 mat=matrix(rep(sqrt_first_3_lambda,nrow(first_3_PCs)),nrow = nrow(first_3_PCs),byrow = F)
 final_mat=first_3_PCs*mat
-View(final_mat)
-cl=kmeans(final_mat,4, iter.max = 100,nstart = 3)
+#View(final_mat)
+cl=kmeans(final_mat,5, iter.max = 100,nstart = 3)
 cl_nms=cl$cluster
-plot3d(final_mat,type = 's',col=cl_nms,xlab = "PCA1",ylab = "PCA2",zlab =  "PCA3",radius = 0.1)
+#plot3d(final_mat,type = 's',col=cl_nms,xlab = "PCA1",ylab = "PCA2",zlab =  "PCA3",radius = 0.1)
+Vars=colnames(data)
 
-
-
+Vars[which(cl_nms==1)]
 
 
 
